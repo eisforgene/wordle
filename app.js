@@ -160,18 +160,30 @@ let showMessage = (message) => {
     setTimeout(() => messageDisplay.removeChild(messageElement), 2000)
 }
 
+let addColorToKey = (dataLetter, color) => {
+    let key = document.getElementById(dataLetter)
+    console.log(key);
+    key.classList.add(color)
+}
+
 //childNodes all children of the row
 let flipTile = () => {
     let rowTiles = document.querySelector('#guessRow-' + currentRow).childNodes
     rowTiles.forEach((tile, index) => {
         let dataLetter = tile.getAttribute('data')
 
-        if (dataLetter == wordle[index]) {
-            tile.classList.add('green-overlay')
-        } else if (wordle.includes(dataLetter)) {
-            tile.classList.add('yellow-overlay');
-        } else {
-            tile.classList.add('gray-overlay');
-        }
+        setTimeout(() => {
+            tile.classList.add('flip')
+            if (dataLetter == wordle[index]) {
+                tile.classList.add('green-overlay')
+                addColorToKey(dataLetter, 'green-overlay')
+            } else if (wordle.includes(dataLetter)) {
+                tile.classList.add('yellow-overlay')
+                addColorToKey(dataLetter, 'yellow-overlay')
+            } else {
+                tile.classList.add('gray-overlay')
+                addColorToKey(dataLetter, 'gray-overlay')
+            }
+        }, 500 * index)
     }) 
 } 
