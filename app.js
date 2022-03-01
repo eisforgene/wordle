@@ -46,6 +46,7 @@ let guessRows = [
 
 let currentRow = 0;
 let currentTile = 0;
+let isGameOver = false;
 
 // create a div
 // give it an id which will be guessRow- + guessRowIndex
@@ -123,13 +124,32 @@ let deleteLetter = () => {
     }
 }
 
+// turn guess into string
+// only if there are 5 letters
+// if the wordle === guess(word), show magnificient
+// callback checkRow() in the event listener function
+
 let checkRow = () => {
-    let guess = guessRows[currentRow].join('');
+    let guess = guessRows[currentRow].join(''); 
     
-    if (currentTile === 5) {     
+    if (currentTile > 4) {     
         console.log('guess is ' + guess, 'wordle is ' + wordle)
-    } if (wordle === guess) {
-        showMessage('Magnificient!');
+        flipTile();
+        if (wordle == guess) {
+            showMessage('Magnificient!');
+            isGameOver = true;
+            return
+        } else {
+            if (currentRow >= 5) {
+                isGameOver = false;
+                showMessage('Game Over');
+                return
+            } 
+            if (currentRow < 5) {
+                currentRow++;
+                currentTile = 0; 
+            }
+        }
     }
 }
 
@@ -139,3 +159,19 @@ let showMessage = (message) => {
     messageDisplay.append(messageElement);
     setTimeout(() => messageDisplay.removeChild(messageElement), 2000)
 }
+
+//childNodes all children of the row
+let flipTile = () => {
+    let rowTiles = document.querySelector('#guessRow-' + currentRow).childNodes
+    rowTiles.forEach((tile, index) => {
+        let dataLetter = tile.getAttribute('data')
+
+        if (dataLetter == wordle[index]) {
+            tile.classList.add('green-overlay')
+        } else if (wordle.includes(dataLetter)) {
+            tile.classList.add('yellow-overlay');
+        } else {
+            tile.classList.add('gray-overlay');
+        }
+    }) 
+} 
